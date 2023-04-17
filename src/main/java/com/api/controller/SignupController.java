@@ -13,24 +13,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.beans.Signup;
-import com.api.repository.LoginRepository;
+
+import com.api.repository.SignupRepository;
 
 
 
 @RestController
 public class SignupController {
 	@Autowired
-	LoginRepository lr;
+	SignupRepository sr;
 	
 	@GetMapping("/signup")
 	public  List<Signup> getSignup() {
-		return lr.findAll();
+		return sr.findAll();
 		
 	}
 	
 	@GetMapping("/signup/{email}")
-	public Signup getCourseid(@PathVariable String email){
-		Optional<Signup> user = lr.findById(email);
+	public Signup getSignup(@PathVariable String email){
+		Optional<Signup> user = sr.findById(email);
 		if (user.isEmpty()) {
 			throw new RuntimeException("(Id is not have");
 			
@@ -39,11 +40,11 @@ public class SignupController {
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity postCourseid(@RequestBody Signup n) {
+	public ResponseEntity postSignup(@RequestBody Signup n) {
 		String email = n.getEmail();
-		Signup findByEmail = lr.findByEmail(email);
+		Signup findByEmail = sr.findByEmail(email);
 		if (findByEmail == null) {
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(lr.save(n));
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(sr.save(n));
 		}else{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exist");
 		}
